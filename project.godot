@@ -1,0 +1,29 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="[KG2025_2C_D3_2024]_Modul1-3_080"
+run/main_scene="res://Scenes/Welcome.tscn"
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[dotnet]
+
+project/assembly_name="ui-komgraf"
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.0509804, 0.0666667, 0.109804, 1)

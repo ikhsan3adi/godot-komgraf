@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://d3vmmelguceln"]
+
+[ext_resource type="Script" uid="uid://cvi8v3sd6kw5p" path="res://Scripts/Karya5.cs" id="1_6ipnv"]
+[ext_resource type="PackedScene" uid="uid://djq027j00vy6g" path="res://Scenes/Buttons/btn_primary.tscn" id="1_gewir"]
+[ext_resource type="Script" uid="uid://0767qowciy5d" path="res://Scripts/BackBtn.cs" id="2_6ipnv"]
+
+[node name="Karya5" type="Node2D"]
+script = ExtResource("1_6ipnv")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+alignment = 1
+
+[node name="BtnBack" parent="Control/VBoxContainer" instance=ExtResource("1_gewir")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+text = "Back"
+script = ExtResource("2_6ipnv")
+
+[connection signal="pressed" from="Control/VBoxContainer/BtnBack" to="Control/VBoxContainer/BtnBack" method="_on_BtnBack_pressed"]

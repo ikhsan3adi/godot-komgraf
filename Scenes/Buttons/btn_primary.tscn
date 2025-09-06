@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://djq027j00vy6g"]
+
+[ext_resource type="FontFile" uid="uid://2cvit2drnqvt" path="res://Assets/fonts/CyberpunkCraftpixPixel.otf" id="1_oobms"]
+[ext_resource type="Texture2D" uid="uid://c657xtiulwebl" path="res://Assets/images/gui/Buttons/6/6_04.png" id="2_8ue8w"]
+[ext_resource type="Texture2D" uid="uid://1rl18dj0xc0q" path="res://Assets/images/gui/Buttons/10/10_04.png" id="2_oobms"]
+[ext_resource type="Texture2D" uid="uid://c6r2yek2jaefb" path="res://Assets/images/gui/Buttons/6/6_08.png" id="3_5wevk"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ue8w"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("2_oobms")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eujoe"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("2_8ue8w")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_84npv"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("3_5wevk")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[node name="BtnPrimary" type="Button"]
+texture_filter = 1
+size_flags_horizontal = 5
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.54902, 1, 0.870588, 1)
+theme_override_colors/font_outline_color = Color(0.901961, 0.2, 0.415686, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.901961, 0.2, 0.415686, 1)
+theme_override_fonts/font = ExtResource("1_oobms")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/disabled = SubResource("StyleBoxTexture_8ue8w")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eujoe")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_84npv")
+theme_override_styles/normal = SubResource("StyleBoxTexture_eujoe")
+text = "Play"
