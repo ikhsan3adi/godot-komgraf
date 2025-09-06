@@ -113,17 +113,14 @@ public static class GraphicsUtils
           // titik
           PutPixel(targetNode, dot[i].X, dot[i].Y, color);
 
-          // gap setelah titik
-          i += gap + 1;
+          i += gap + 1;              // gap setelah titik
           if (i >= dot.Count) break; // mencapai ujung garis
 
           int dashEnd = Math.Min(i + stripLength, dot.Count);
 
           // Gambar pixel berikutnya dari daftar dot sebagai sebuah garis.
           for (int j = i; j < dashEnd; j++)
-          {
             PutPixel(targetNode, dot[j].X, dot[j].Y, color);
-          }
 
           // skip titik di gap
           i += stripLength + gap;

@@ -28,7 +28,7 @@ public static class ScreenUtils
     YMin = MarginBottom;
   }
 
-  public static Vector2 ConvertToCartesian(float x, float y, float marginLeft, float marginTop)
+  public static Vector2 ConvertToCartesian(float x, float y, float marginLeft = 0, float marginTop = 0)
   {
     float axis = (float)(Math.Ceiling((float)ScreenWidth / 2) - marginLeft);
     float ordinat = (float)(Math.Ceiling((float)ScreenHeight / 2) - marginTop);
@@ -41,8 +41,8 @@ public static class ScreenUtils
 
   public static Vector2 ConvertToPixel(float x, float y, float marginLeft = 0, float marginTop = 0)
   {
-    float axis = (float)(Math.Ceiling((float)ScreenWidth / 2));
-    float ordinat = (float)(Math.Ceiling((float)ScreenHeight / 2));
+    float axis = (float)(Math.Ceiling((float)ScreenWidth / 2) - marginLeft);
+    float ordinat = (float)(Math.Ceiling((float)ScreenHeight / 2) - marginTop);
 
     x = axis + x;
     y = ordinat - y;
