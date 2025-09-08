@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://c06fjgs62xb70"]
+
+[ext_resource type="PackedScene" uid="uid://djq027j00vy6g" path="res://Scenes/Buttons/btn_primary.tscn" id="1_javd6"]
+[ext_resource type="Script" uid="uid://b2hp54mytdlqo" path="res://Scripts/Karya7.cs" id="1_w7rys"]
+[ext_resource type="Script" uid="uid://0767qowciy5d" path="res://Scripts/BackBtn.cs" id="2_w7rys"]
+
+[node name="Karya7" type="Node2D"]
+script = ExtResource("1_w7rys")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BtnBack" parent="Control" instance=ExtResource("1_javd6")]
+offset_left = 24.0
+offset_top = 12.0
+offset_right = 126.0
+offset_bottom = 54.0
+size_flags_horizontal = 6
+size_flags_vertical = 10
+text = "Back"
+script = ExtResource("2_w7rys")
+
+[node name="BtnNext" parent="Control" instance=ExtResource("1_javd6")]
+offset_left = 1105.0
+offset_top = 339.0
+offset_right = 1207.0
+offset_bottom = 381.0
+size_flags_horizontal = 6
+size_flags_vertical = 10
+text = "Penguin"
+script = ExtResource("2_w7rys")
+
+[connection signal="pressed" from="Control/BtnBack" to="Control/BtnBack" method="_on_BtnBack_pressed"]
+[connection signal="pressed" from="Control/BtnNext" to="." method="_on_next_btn_pressed"]

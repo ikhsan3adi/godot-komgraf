@@ -66,55 +66,85 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="BtnProyek1" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="BtnProyek1" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 7
 text = "Proyek 1"
 
-[node name="BtnProyek2" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnProyek2" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
+size_flags_horizontal = 7
 text = "Proyek 2"
 
-[node name="BtnProyek3" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnProyek3" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
 text = "Proyek 3"
 
-[node name="BtnProyek4" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnProyek4" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
 text = "Proyek 4"
 
-[node name="BtnProyek5" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnProyek5" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
 text = "Proyek 5"
 
-[node name="BtnProyek6" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnProyek6" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
 text = "Proyek 6"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="BtnAbout" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnAbout" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "About"
 
-[node name="BtnGuide" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_a8035")]
+[node name="BtnGuide" parent="MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("4_a8035")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Guide"
+
+[node name="BtnProyek7Kuis" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+size_flags_horizontal = 7
+text = "Karya 7 - Candy"
+
+[node name="BtnProyek8Kuis" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+size_flags_horizontal = 7
+text = "Karya 8 - Penguin"
+
+[node name="BtnProyek9Kuis" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+size_flags_horizontal = 7
+text = "Karya 9 - Plane"
 
 [node name="BtnExit" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
 layout_mode = 2
 text = "Exit"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek1" to="." method="_on_BtnKarya1_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek2" to="." method="_on_BtnKarya2_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek3" to="." method="_on_BtnKarya3_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek4" to="." method="_on_BtnKarya4_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek5" to="." method="_on_BtnKarya5_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek6" to="." method="_on_BtnKarya6_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/BtnAbout" to="." method="_on_BtnAbout_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/BtnGuide" to="." method="_on_BtnGuide_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnProyek1" to="." method="_on_BtnKarya1_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnProyek2" to="." method="_on_BtnKarya2_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnProyek3" to="." method="_on_BtnKarya3_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnProyek4" to="." method="_on_BtnKarya4_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnProyek5" to="." method="_on_BtnKarya5_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnProyek6" to="." method="_on_BtnKarya6_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnAbout" to="." method="_on_BtnAbout_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer/BtnGuide" to="." method="_on_BtnGuide_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek7Kuis" to="." method="_on_BtnKarya7_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek8Kuis" to="." method="_on_BtnKarya8_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnProyek9Kuis" to="." method="_on_BtnKarya9_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BtnExit" to="." method="_on_BtnExit_pressed"]
