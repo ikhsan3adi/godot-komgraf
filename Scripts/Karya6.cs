@@ -7,6 +7,7 @@ public partial class Karya6 : Node2D
 {
   private BentukDasar _bentukDasar = new BentukDasar();
   private Primitif _primitif = new Primitif();
+  private Transformasi _transformasi = new Transformasi();
 
   struct GambarBentuk(string name, Action draw)
   {
@@ -86,27 +87,82 @@ public partial class Karya6 : Node2D
   private void GambarGaris()
   {
     // kuadran 1 (garis-garis)
-    Vector2 taw1 = ScreenUtils.ConvertToPixel(100, 250);
-    Vector2 tak1 = ScreenUtils.ConvertToPixel(500, 50);
-    var garis1 = _primitif.LineBresenham(taw1.X, taw1.Y, tak1.X, tak1.Y);
+
+    Vector2 titikAwal = new(0, 0); // kartesian
+    Vector2 titikAkhir = new(100, 0); // kartesian
+
+    float[,] matrixA = new float[3, 3] {
+      { titikAwal.X, 0, 0 },
+      { titikAwal.Y, 0, 0 },
+      { 1, 0, 0 },
+    };
+
+    float[,] matrixB = new float[3, 3] {
+      { titikAkhir.X, 0, 0 },
+      { titikAkhir.Y, 0, 0 },
+      { 1, 0, 0 },
+    };
+
+    // translate ke kuadran 1
+    _transformasi.Translation(matrixA, 100, 250, ref titikAwal);
+    _transformasi.Translation(matrixB, 200, 250, ref titikAkhir);
+
+    // rotasi clockwise 30deg (pivot titikAwal)
+    _transformasi.RotationClockwise(matrixB, 30, titikAwal);
+    titikAkhir.X = matrixB[0, 0];
+    titikAkhir.Y = matrixB[1, 0];
+
+    // scale 2.0x (pivot titikAwal)
+    _transformasi.Scaling(matrixB, 2.0f, 2.0f, titikAwal);
+    titikAkhir.X = matrixB[0, 0];
+    titikAkhir.Y = matrixB[1, 0];
+
+    Vector2 titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwal.X, titikAwal.Y); // screen
+    Vector2 titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhir.X, titikAkhir.Y); // screen
+
+    var garis1 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
     GraphicsUtils.PutPixelAll(this, garis1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
 
     // Kuadran 2 (garis normal)
-    Vector2 taw2 = ScreenUtils.ConvertToPixel(-100, 250);
-    Vector2 tak2 = ScreenUtils.ConvertToPixel(-500, 50);
-    var garis2 = _primitif.LineBresenham(taw2.X, taw2.Y, tak2.X, tak2.Y);
+    // refleksi y kuadran 1
+    _transformasi.ReflectionToY(matrixA, ref titikAwal);
+    _transformasi.ReflectionToY(matrixB, ref titikAkhir);
+
+    Vector2 titikAwalK2 = titikAwal;
+    Vector2 titikAkhirK2 = titikAkhir;
+
+    titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwal.X, titikAwal.Y);
+    titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhir.X, titikAkhir.Y);
+
+    var garis2 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
     GraphicsUtils.PutPixelAll(this, garis2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 taw3 = ScreenUtils.ConvertToPixel(-100, -250);
-    Vector2 tak3 = ScreenUtils.ConvertToPixel(-500, -50);
-    var garis3 = _primitif.LineBresenham(taw3.X, taw3.Y, tak3.X, tak3.Y);
+    // refleksi x kuadran 2
+    _transformasi.ReflectionToX(matrixA, ref titikAwal);
+    _transformasi.ReflectionToX(matrixB, ref titikAkhir);
+
+    titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwal.X, titikAwal.Y);
+    titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhir.X, titikAkhir.Y);
+
+    var garis3 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
     GraphicsUtils.PutPixelAll(this, garis3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 taw4 = ScreenUtils.ConvertToPixel(100, -250);
-    Vector2 tak4 = ScreenUtils.ConvertToPixel(500, -50);
-    var garis4 = _primitif.LineBresenham(taw4.X, taw4.Y, tak4.X, tak4.Y);
+    // refleksi origin (0, 0) kuadran 2
+    // Reset matrix
+    _transformasi.ReflectionToY(matrixA, ref titikAwalK2); // to K1
+    _transformasi.ReflectionToY(matrixB, ref titikAkhirK2);
+    _transformasi.ReflectionToY(matrixA, ref titikAwalK2); // to K2
+    _transformasi.ReflectionToY(matrixB, ref titikAkhirK2);
+
+    _transformasi.ReflectionToOrigin(matrixA, ref titikAwalK2);
+    _transformasi.ReflectionToOrigin(matrixB, ref titikAkhirK2);
+
+    titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwalK2.X, titikAwalK2.Y);
+    titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhirK2.X, titikAkhirK2.Y);
+
+    var garis4 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
     GraphicsUtils.PutPixelAll(this, garis4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
   }
 
