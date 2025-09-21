@@ -1,0 +1,105 @@
+[gd_scene load_steps=6 format=3 uid="uid://2jnayay8fv7m"]
+
+[ext_resource type="Script" uid="uid://b8plphc66vx0i" path="res://Scripts/Welcome.cs" id="1_058be"]
+[ext_resource type="FontFile" uid="uid://2cvit2drnqvt" path="res://Assets/fonts/CyberpunkCraftpixPixel.otf" id="2_84npv"]
+[ext_resource type="Texture2D" uid="uid://ctpl7vu3yklkx" path="res://Assets/images/gui/Logo/Logo1.png" id="3_ooh06"]
+[ext_resource type="PackedScene" uid="uid://djq027j00vy6g" path="res://Scenes/Buttons/btn_primary.tscn" id="4_a8035"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eda0n"]
+content_margin_left = 48.0
+content_margin_top = 24.0
+content_margin_right = 48.0
+content_margin_bottom = 56.0
+texture = ExtResource("3_ooh06")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 54.0
+
+[node name="Welcome" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_058be")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="BackgroundBase" type="ColorRect" parent="MarginContainer"]
+layout_mode = 2
+color = Color(0.04969, 0.068184, 0.109897, 1)
+
+[node name="Background" type="TextureRect" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="LogoTitle" type="Label" parent="MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.0901961, 0, 0.266667, 1)
+theme_override_colors/font_outline_color = Color(0.901961, 0.2, 0.415686, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("2_84npv")
+theme_override_font_sizes/font_size = 56
+theme_override_styles/normal = SubResource("StyleBoxTexture_eda0n")
+text = "NullMatrixSpace"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="BtnKarya1" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+text = "Karya 1"
+
+[node name="BtnKarya2" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+text = "Karya 2"
+
+[node name="BtnKarya3" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+text = "Karya 3"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="BtnAbout" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "About"
+
+[node name="BtnGuide" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Guide"
+
+[node name="BtnExit" parent="MarginContainer/VBoxContainer" instance=ExtResource("4_a8035")]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnKarya1" to="." method="_on_BtnKarya1_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnKarya2" to="." method="_on_BtnKarya2_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnKarya3" to="." method="_on_BtnKarya3_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/BtnAbout" to="." method="_on_BtnAbout_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/BtnGuide" to="." method="_on_BtnGuide_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BtnExit" to="." method="_on_BtnExit_pressed"]
