@@ -183,66 +183,66 @@ public partial class Primitif : RefCounted
     points.Add(new Vector2(xCenter - y, yCenter - x));
   }
 
-public List<Vector2> EllipseMidpoint(int xCenter, int yCenter, int rx, int ry)
-{
-  List<Vector2> points = new List<Vector2>();
-
-  int rx2 = rx * rx;
-  int ry2 = ry * ry;
-  int twoRx2 = 2 * rx2;
-  int twoRy2 = 2 * ry2;
-  int x = 0;
-  int y = ry;
-  int p;
-  int px = 0;
-  int py = twoRx2 * y;
-
-  // Region 1
-  p = (int)(ry2 - (rx2 * ry) + (0.25 * rx2));
-  while (px < py)
+  public List<Vector2> EllipseMidpoint(int xCenter, int yCenter, int rx, int ry)
   {
-    EllipsePlotPoints(xCenter, yCenter, x, y, points);
-    x++;
-    px += twoRy2;
-    if (p < 0)
-    {
-      p += ry2 + px;
-    }
-    else
-    {
-      y--;
-      py -= twoRx2;
-      p += ry2 + px - py;
-    }
-  }
+    List<Vector2> points = new List<Vector2>();
 
-  // Region 2
-  p = (int)(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
-  while (y >= 0)
-  {
-    EllipsePlotPoints(xCenter, yCenter, x, y, points);
-    y--;
-    py -= twoRx2;
-    if (p > 0)
+    int rx2 = rx * rx;
+    int ry2 = ry * ry;
+    int twoRx2 = 2 * rx2;
+    int twoRy2 = 2 * ry2;
+    int x = 0;
+    int y = ry;
+    int p;
+    int px = 0;
+    int py = twoRx2 * y;
+
+    // Region 1
+    p = (int)(ry2 - (rx2 * ry) + (0.25 * rx2));
+    while (px < py)
     {
-      p += rx2 - py;
-    }
-    else
-    {
+      EllipsePlotPoints(xCenter, yCenter, x, y, points);
       x++;
       px += twoRy2;
-      p += rx2 - py + px;
+      if (p < 0)
+      {
+        p += ry2 + px;
+      }
+      else
+      {
+        y--;
+        py -= twoRx2;
+        p += ry2 + px - py;
+      }
     }
-  }
-  return points;
-}
 
-private void EllipsePlotPoints(int xCenter, int yCenter, int x, int y, List<Vector2> points)
-{
-  points.Add(new Vector2(xCenter + x, yCenter + y));
-  points.Add(new Vector2(xCenter - x, yCenter + y));
-  points.Add(new Vector2(xCenter + x, yCenter - y));
-  points.Add(new Vector2(xCenter - x, yCenter - y));
-}
+    // Region 2
+    p = (int)(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
+    while (y >= 0)
+    {
+      EllipsePlotPoints(xCenter, yCenter, x, y, points);
+      y--;
+      py -= twoRx2;
+      if (p > 0)
+      {
+        p += rx2 - py;
+      }
+      else
+      {
+        x++;
+        px += twoRy2;
+        p += rx2 - py + px;
+      }
+    }
+    return points;
+  }
+
+  private void EllipsePlotPoints(int xCenter, int yCenter, int x, int y, List<Vector2> points)
+  {
+    points.Add(new Vector2(xCenter + x, yCenter + y));
+    points.Add(new Vector2(xCenter - x, yCenter + y));
+    points.Add(new Vector2(xCenter + x, yCenter - y));
+    points.Add(new Vector2(xCenter - x, yCenter - y));
+  }
 
 }
