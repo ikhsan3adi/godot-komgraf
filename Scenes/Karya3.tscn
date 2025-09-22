@@ -1,11 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci57gocujsw03"]
+[gd_scene load_steps=8 format=3 uid="uid://ci57gocujsw03"]
 
 [ext_resource type="Script" uid="uid://bx5hkbcaoeci0" path="res://Scripts/Karya3.cs" id="1_tb080"]
+[ext_resource type="PackedScene" uid="uid://b0n8eqqi4tsk0" path="res://Scenes/Buttons/btn_orange.tscn" id="2_pkovj"]
 [ext_resource type="PackedScene" uid="uid://djq027j00vy6g" path="res://Scenes/Buttons/btn_primary.tscn" id="2_uju40"]
 [ext_resource type="Script" uid="uid://cv06db8sgjkrj" path="res://Scripts/BackBtn.cs" id="2_xhmun"]
+[ext_resource type="FontFile" uid="uid://2cvit2drnqvt" path="res://Assets/fonts/CyberpunkCraftpixPixel.otf" id="3_gsipy"]
+[ext_resource type="Texture2D" uid="uid://cwssgqxjg2ide" path="res://Assets/images/gui/Frames/Frame_80.png" id="4_25aus"]
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yxay3"]
+texture = ExtResource("4_25aus")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[node name="Node2D" type="Node2D" node_paths=PackedStringArray("_label")]
 script = ExtResource("1_tb080")
+_label = NodePath("Control/VBoxContainer/HBoxContainer/Label")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -19,11 +30,45 @@ offset_right = 1280.0
 offset_bottom = 720.0
 alignment = 1
 
-[node name="BtnBack" parent="Control/VBoxContainer" instance=ExtResource("2_uju40")]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="PrevBtn" parent="Control/VBoxContainer/HBoxContainer" instance=ExtResource("2_pkovj")]
+layout_mode = 2
+text = "Prev"
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/HBoxContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.0901961, 0, 0.266667, 1)
+theme_override_fonts/font = ExtResource("3_gsipy")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxTexture_yxay3")
+text = "Nama Bentuk"
+horizontal_alignment = 1
+
+[node name="NextBtn" parent="Control/VBoxContainer/HBoxContainer" instance=ExtResource("2_pkovj")]
+layout_mode = 2
+text = "Next"
+
+[node name="BlankControl" type="Control" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BtnBack" parent="Control/VBoxContainer/HBoxContainer2" instance=ExtResource("2_uju40")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
 text = "Back"
 script = ExtResource("2_xhmun")
 
-[connection signal="pressed" from="Control/VBoxContainer/BtnBack" to="Control/VBoxContainer/BtnBack" method="_on_BtnBack_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/PrevBtn" to="." method="_on_prev_btn_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/NextBtn" to="." method="_on_next_btn_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer2/BtnBack" to="Control/VBoxContainer/HBoxContainer2/BtnBack" method="_on_BtnBack_pressed"]
