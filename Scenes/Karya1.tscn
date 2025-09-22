@@ -14,14 +14,15 @@ texture_margin_top = 10.0
 texture_margin_right = 10.0
 texture_margin_bottom = 10.0
 
-[node name="Node2D" type="Node2D" node_paths=PackedStringArray("_label", "_frameToggleCheckBtn", "_cartesianToggleCheckBtn", "_translateToggleCheckBtn", "_rotateToggleCheckBtn", "_scaleToggleCheckBtn")]
+[node name="Node2D" type="Node2D" node_paths=PackedStringArray("_label", "_frameToggleCheckBtn", "_cartesianToggleCheckBtn", "_translateXSlider", "_translateYSlider", "_rotateSlider", "_scaleSlider")]
 script = ExtResource("1_s751k")
 _label = NodePath("Control/VBoxContainer/HBoxContainer/Label")
 _frameToggleCheckBtn = NodePath("Control/VBoxContainer/HBoxContainer2/MarginCheckButton")
 _cartesianToggleCheckBtn = NodePath("Control/VBoxContainer/HBoxContainer2/CartesianCheckButton")
-_translateToggleCheckBtn = NodePath("Control/VBoxContainer/HBoxContainer2/TranslateCheckButton")
-_rotateToggleCheckBtn = NodePath("Control/VBoxContainer/HBoxContainer2/RotateCheckButton")
-_scaleToggleCheckBtn = NodePath("Control/VBoxContainer/HBoxContainer2/ScaleCheckButton")
+_translateXSlider = NodePath("Control/VBoxContainer/HBoxContainer2/HBoxContainer/TranslateXSlider")
+_translateYSlider = NodePath("Control/VBoxContainer/HBoxContainer2/HBoxContainer2/TranslateYSlider")
+_rotateSlider = NodePath("Control/VBoxContainer/HBoxContainer2/HBoxContainer3/RotateSlider")
+_scaleSlider = NodePath("Control/VBoxContainer/HBoxContainer2/HBoxContainer4/ScaleSlider")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -92,27 +93,72 @@ size_flags_horizontal = 6
 theme_override_fonts/font = ExtResource("3_rvd15")
 text = "Cartesian"
 
-[node name="TranslateCheckButton" type="CheckButton" parent="Control/VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-size_flags_horizontal = 6
-theme_override_fonts/font = ExtResource("3_rvd15")
-text = "Translate"
+size_flags_horizontal = 3
 
-[node name="RotateCheckButton" type="CheckButton" parent="Control/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 6
+theme_override_fonts/font = ExtResource("3_rvd15")
+text = "Translate X"
+
+[node name="TranslateXSlider" type="HSlider" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -500.0
+max_value = 1000.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_rvd15")
+text = "Translate Y"
+
+[node name="TranslateYSlider" type="HSlider" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -500.0
+max_value = 500.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer3"]
+layout_mode = 2
 theme_override_fonts/font = ExtResource("3_rvd15")
 text = "Rotate"
 
-[node name="ScaleCheckButton" type="CheckButton" parent="Control/VBoxContainer/HBoxContainer2"]
+[node name="RotateSlider" type="HSlider" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer3"]
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 360.0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Control/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer4"]
+layout_mode = 2
 theme_override_fonts/font = ExtResource("3_rvd15")
 text = "Scale"
+
+[node name="ScaleSlider" type="HSlider" parent="Control/VBoxContainer/HBoxContainer2/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 5.0
 
 [connection signal="pressed" from="Control/VBoxContainer/HBoxContainer2/BtnBack" to="Control/VBoxContainer/HBoxContainer2/BtnBack" method="_on_BtnBack_pressed"]
 [connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/MarginCheckButton" to="." method="_on_margin_button_toggled"]
 [connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/CartesianCheckButton" to="." method="_on_cartesian_button_toggled"]
-[connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/TranslateCheckButton" to="." method="_on_translate_button_toggled"]
-[connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/RotateCheckButton" to="." method="_on_rotate_button_toggled"]
-[connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/ScaleCheckButton" to="." method="_on_scale_button_toggled"]
+[connection signal="value_changed" from="Control/VBoxContainer/HBoxContainer2/HBoxContainer/TranslateXSlider" to="." method="_on_translate_x_changed"]
+[connection signal="value_changed" from="Control/VBoxContainer/HBoxContainer2/HBoxContainer2/TranslateYSlider" to="." method="_on_translate_y_changed"]
+[connection signal="value_changed" from="Control/VBoxContainer/HBoxContainer2/HBoxContainer3/RotateSlider" to="." method="_on_rotate_changed"]
+[connection signal="value_changed" from="Control/VBoxContainer/HBoxContainer2/HBoxContainer4/ScaleSlider" to="." method="_on_scale_changed"]
