@@ -18,7 +18,7 @@ public partial class Karya1 : Node2D
   private int idx = 0;
   private bool marginEnabled = true;
   private bool cartesianEnabled = true;
-  private Vector2 translation = new(100, 250);
+  private Vector2 translation = new(150, 150);
   private float rotation = 30.0f;
   private float scale = 2.0f;
 
@@ -50,12 +50,12 @@ public partial class Karya1 : Node2D
     ScreenUtils.Initialize(GetViewport()); // Initialize ScreenUtils
 
     gambarBentuk.Add(new GambarBentuk("Garis", GambarGaris));
-    // gambarBentuk.Add(new GambarBentuk("Persegi", GambarPersegi));
-    // gambarBentuk.Add(new GambarBentuk("Persegi Panjang", GambarPersegiPanjang));
-    // gambarBentuk.Add(new GambarBentuk("Segitiga Siku-siku", GambarSegitigaSikuSiku));
-    // gambarBentuk.Add(new GambarBentuk("Trapesium Siku-siku", GambarTrapesiumSikuSiku));
-    // gambarBentuk.Add(new GambarBentuk("Lingkaran", GambarLingkaran));
-    // gambarBentuk.Add(new GambarBentuk("Elips", GambarElips));
+    gambarBentuk.Add(new GambarBentuk("Persegi", GambarPersegi));
+    gambarBentuk.Add(new GambarBentuk("Persegi Panjang", GambarPersegiPanjang));
+    gambarBentuk.Add(new GambarBentuk("Segitiga Siku-siku", GambarSegitigaSikuSiku));
+    gambarBentuk.Add(new GambarBentuk("Trapesium Siku-siku", GambarTrapesiumSikuSiku));
+    gambarBentuk.Add(new GambarBentuk("Lingkaran", GambarLingkaran));
+    gambarBentuk.Add(new GambarBentuk("Elips", GambarElips));
 
     _frameToggleCheckBtn.ButtonPressed = marginEnabled;
     _cartesianToggleCheckBtn.ButtonPressed = cartesianEnabled;
@@ -161,215 +161,339 @@ public partial class Karya1 : Node2D
 
     float[,] matrixA = new float[3, 3] {
       { titikAwal.X, 0, 0 },
-      { titikAwal.Y, 0, 0 },
-      { 1, 0, 0 },
+      { titikAwal.Y, 1, 0 },
+      { 1, 0, 1 },
     };
 
     float[,] matrixB = new float[3, 3] {
       { titikAkhir.X, 0, 0 },
-      { titikAkhir.Y, 0, 0 },
-      { 1, 0, 0 },
+      { titikAkhir.Y, 1, 0 },
+      { 1, 0, 1 },
     };
 
-    // translate ke kuadran 1
+    // translate
     _transformasi.Translation(matrixA, translation.X, translation.Y, ref titikAwal);
     _transformasi.Translation(matrixB, translation.X, translation.Y, ref titikAkhir);
 
-    // rotasi clockwise 30deg (pivot titikAwal)
-    _transformasi.RotationClockwise(matrixB, rotation, titikAwal);
+    Vector2 titikTengah = new((titikAwal.X + titikAkhir.X) / 2, (titikAwal.Y + titikAkhir.Y) / 2);
+
+    // rotasi clockwise (pivot titikTengah)
+    _transformasi.RotationClockwise(matrixA, rotation, titikTengah);
+    _transformasi.RotationClockwise(matrixB, rotation, titikTengah);
+    titikAwal.X = matrixA[0, 0];
+    titikAwal.Y = matrixA[1, 0];
     titikAkhir.X = matrixB[0, 0];
     titikAkhir.Y = matrixB[1, 0];
 
-    // scale 2.0x (pivot titikAwal)
-    _transformasi.Scaling(matrixB, scale, scale, titikAwal);
+    // scale (pivot titikTengah)
+    _transformasi.Scaling(matrixA, scale, scale, titikTengah);
+    _transformasi.Scaling(matrixB, scale, scale, titikTengah);
+    titikAwal.X = matrixA[0, 0];
+    titikAwal.Y = matrixA[1, 0];
     titikAkhir.X = matrixB[0, 0];
     titikAkhir.Y = matrixB[1, 0];
 
-    Vector2 titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwal.X, titikAwal.Y); // screen
-    Vector2 titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhir.X, titikAkhir.Y); // screen
-
-    var garis1 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
-    GraphicsUtils.PutPixelAll(this, garis1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
+    var garis1 = _primitif.LineBresenham(titikAwal.X, titikAwal.Y, titikAkhir.X, titikAkhir.Y);
+    GraphicsUtils.PutPixelAllCartesian(this, garis1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
 
     // Kuadran 2 (garis normal)
     // refleksi y kuadran 1
     _transformasi.ReflectionToY(matrixA, ref titikAwal);
     _transformasi.ReflectionToY(matrixB, ref titikAkhir);
 
-    Vector2 titikAwalK2 = titikAwal;
-    Vector2 titikAkhirK2 = titikAkhir;
-
-    titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwal.X, titikAwal.Y);
-    titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhir.X, titikAkhir.Y);
-
-    var garis2 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
-    GraphicsUtils.PutPixelAll(this, garis2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    var garis2 = _primitif.LineBresenham(titikAwal.X, titikAwal.Y, titikAkhir.X, titikAkhir.Y);
+    GraphicsUtils.PutPixelAllCartesian(this, garis2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
     // refleksi x kuadran 2
     _transformasi.ReflectionToX(matrixA, ref titikAwal);
     _transformasi.ReflectionToX(matrixB, ref titikAkhir);
 
-    titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwal.X, titikAwal.Y);
-    titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhir.X, titikAkhir.Y);
-
-    var garis3 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
-    GraphicsUtils.PutPixelAll(this, garis3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
+    var garis3 = _primitif.LineBresenham(titikAwal.X, titikAwal.Y, titikAkhir.X, titikAkhir.Y);
+    GraphicsUtils.PutPixelAllCartesian(this, garis3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    // refleksi origin (0, 0) kuadran 2
-    // Reset matrix
-    _transformasi.ReflectionToY(matrixA, ref titikAwalK2); // to K1
-    _transformasi.ReflectionToY(matrixB, ref titikAkhirK2);
-    _transformasi.ReflectionToY(matrixA, ref titikAwalK2); // to K2
-    _transformasi.ReflectionToY(matrixB, ref titikAkhirK2);
+    // refleksi y kuadran 3
+    _transformasi.ReflectionToY(matrixA, ref titikAwal);
+    _transformasi.ReflectionToY(matrixB, ref titikAkhir);
 
-    _transformasi.ReflectionToOrigin(matrixA, ref titikAwalK2);
-    _transformasi.ReflectionToOrigin(matrixB, ref titikAkhirK2);
-
-    titikAwalPixel = ScreenUtils.ConvertToPixel(titikAwalK2.X, titikAwalK2.Y);
-    titikAkhirPixel = ScreenUtils.ConvertToPixel(titikAkhirK2.X, titikAkhirK2.Y);
-
-    var garis4 = _primitif.LineBresenham(titikAwalPixel.X, titikAwalPixel.Y, titikAkhirPixel.X, titikAkhirPixel.Y);
-    GraphicsUtils.PutPixelAll(this, garis4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
+    var garis4 = _primitif.LineBresenham(titikAwal.X, titikAwal.Y, titikAkhir.X, titikAkhir.Y);
+    GraphicsUtils.PutPixelAllCartesian(this, garis4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
   }
 
   private void GambarPersegi()
   {
     // kuadran 1 (garis-garis)
-    Vector2 taw1 = ScreenUtils.ConvertToPixel(200, 200);
-    var persegi1 = _bentukDasar.Persegi(taw1.X, taw1.Y, 100);
-    GraphicsUtils.PutPixelAll(this, persegi1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
+
+    // kartesian
+    Vector2 titikAwal = new(0, 0);
+    float panjang = 100;
+
+    float[,] matrix = new float[3, 3] {
+      { 1, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 1 },
+    };
+
+    var basePersegi = _bentukDasar.Persegi(titikAwal.X, titikAwal.Y, panjang);
+
+    // translate
+    _transformasi.Translation(matrix, translation.X, translation.Y, ref titikAwal);
+
+    Vector2 titikTengah = new(titikAwal.X + panjang / 2, titikAwal.Y + panjang / 2);
+
+    // rotate (pivot titikTengah / pusatPersegi)
+    _transformasi.RotationClockwise(matrix, rotation, titikTengah);
+
+    // scale (pivot titikTengah / pusatPersegi)
+    _transformasi.Scaling(matrix, scale, scale, titikTengah);
+
+    var persegi1 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
 
     // Kuadran 2 (garis normal)
-    Vector2 taw2 = ScreenUtils.ConvertToPixel(-300, 200);
-    var persegi2 = _bentukDasar.Persegi(taw2.X, taw2.Y, 100);
-    GraphicsUtils.PutPixelAll(this, persegi2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var persegi2 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 taw3 = ScreenUtils.ConvertToPixel(-300, -100);
-    var persegi3 = _bentukDasar.Persegi(taw3.X, taw3.Y, 100);
-    GraphicsUtils.PutPixelAll(this, persegi3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
+    _transformasi.ReflectionToX(matrix, ref titikTengah);
+    var persegi3 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 taw4 = ScreenUtils.ConvertToPixel(200, -100);
-    var persegi4 = _bentukDasar.Persegi(taw4.X, taw4.Y, 100);
-    GraphicsUtils.PutPixelAll(this, persegi4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var persegi4 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
   }
 
   private void GambarPersegiPanjang()
   {
     // kuadran 1 (garis-garis)
-    Vector2 taw1 = ScreenUtils.ConvertToPixel(200, 200);
-    var persegiPanjang1 = _bentukDasar.PersegiPanjang(taw1.X, taw1.Y, 200, 100);
-    GraphicsUtils.PutPixelAll(this, persegiPanjang1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
+
+    // kartesian
+    Vector2 titikAwal = new(0, 0);
+    float panjang = 200;
+    float lebar = 100;
+
+    float[,] matrix = new float[3, 3] {
+      { 1, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 1 },
+    };
+
+    var basePersegi = _bentukDasar.PersegiPanjang(titikAwal.X, titikAwal.Y, panjang, lebar);
+
+    // translate
+    _transformasi.Translation(matrix, translation.X, translation.Y, ref titikAwal);
+
+    Vector2 titikTengah = new(titikAwal.X + panjang / 2, titikAwal.Y + lebar / 2);
+
+    // rotate (pivot titikTengah / pusatPersegi)
+    _transformasi.RotationClockwise(matrix, rotation, titikTengah);
+
+    // scale (pivot titikTengah / pusatPersegi)
+    _transformasi.Scaling(matrix, scale, scale, titikTengah);
+
+    var persegi1 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
 
     // Kuadran 2 (garis normal)
-    Vector2 taw2 = ScreenUtils.ConvertToPixel(-400, 200);
-    var persegiPanjang2 = _bentukDasar.PersegiPanjang(taw2.X, taw2.Y, 200, 100);
-    GraphicsUtils.PutPixelAll(this, persegiPanjang2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var persegi2 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 taw3 = ScreenUtils.ConvertToPixel(-400, -100);
-    var persegiPanjang3 = _bentukDasar.PersegiPanjang(taw3.X, taw3.Y, 200, 100);
-    GraphicsUtils.PutPixelAll(this, persegiPanjang3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
+    _transformasi.ReflectionToX(matrix, ref titikTengah);
+    var persegi3 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 taw4 = ScreenUtils.ConvertToPixel(200, -100);
-    var persegiPanjang4 = _bentukDasar.PersegiPanjang(taw4.X, taw4.Y, 200, 100);
-    GraphicsUtils.PutPixelAll(this, persegiPanjang4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var persegi4 = _transformasi.GetTransformPoint(matrix, basePersegi);
+    GraphicsUtils.PutPixelAllCartesian(this, persegi4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
   }
 
   private void GambarSegitigaSikuSiku()
   {
     // kuadran 1 (garis-garis)
-    Vector2 taw1 = ScreenUtils.ConvertToPixel(200, 100);
-    var segitiga1 = _bentukDasar.SegitigaSiku(taw1, 200, 100);
-    GraphicsUtils.PutPixelAll(this, segitiga1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
+
+    // kartesian
+    Vector2 titikAwal = new(0, 0);
+    float alas = 100;
+    float tinggi = 150;
+
+    float[,] matrix = new float[3, 3] {
+      { 1, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 1 },
+    };
+
+    var baseSegitiga = _bentukDasar.SegitigaSiku(titikAwal, (int)alas, (int)tinggi);
+
+    // translate
+    _transformasi.Translation(matrix, translation.X, translation.Y, ref titikAwal);
+
+    Vector2 titikTengah = new(titikAwal.X + alas / 2, titikAwal.Y + tinggi / 2);
+
+    // rotate (pivot titikTengah)
+    _transformasi.RotationClockwise(matrix, rotation, titikTengah);
+
+    // scale (pivot titikTengah)
+    _transformasi.Scaling(matrix, scale, scale, titikTengah);
+
+    var segitiga1 = _transformasi.GetTransformPoint(matrix, baseSegitiga);
+    GraphicsUtils.PutPixelAllCartesian(this, segitiga1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
 
     // Kuadran 2 (garis normal)
-    Vector2 taw2 = ScreenUtils.ConvertToPixel(-400, 100);
-    var segitiga2 = _bentukDasar.SegitigaSiku(taw2, 200, 100);
-    GraphicsUtils.PutPixelAll(this, segitiga2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var segitiga2 = _transformasi.GetTransformPoint(matrix, baseSegitiga);
+    GraphicsUtils.PutPixelAllCartesian(this, segitiga2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 taw3 = ScreenUtils.ConvertToPixel(-400, -200);
-    var segitiga3 = _bentukDasar.SegitigaSiku(taw3, 200, 100);
-    GraphicsUtils.PutPixelAll(this, segitiga3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
+    _transformasi.ReflectionToX(matrix, ref titikTengah);
+    var segitiga3 = _transformasi.GetTransformPoint(matrix, baseSegitiga);
+    GraphicsUtils.PutPixelAllCartesian(this, segitiga3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 taw4 = ScreenUtils.ConvertToPixel(200, -200);
-    var segitiga4 = _bentukDasar.SegitigaSiku(taw4, 200, 100);
-    GraphicsUtils.PutPixelAll(this, segitiga4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var segitiga4 = _transformasi.GetTransformPoint(matrix, baseSegitiga);
+    GraphicsUtils.PutPixelAllCartesian(this, segitiga4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
   }
 
   private void GambarTrapesiumSikuSiku()
   {
     // kuadran 1 (garis-garis)
-    Vector2 taw1 = ScreenUtils.ConvertToPixel(200, 100);
-    var trapesium1 = _bentukDasar.TrapesiumSiku(taw1, 150, 200, 100);
-    GraphicsUtils.PutPixelAll(this, trapesium1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
+
+    // kartesian
+    Vector2 titikAwal = new(0, 0);
+    float panjangAtas = 150;
+    float panjangBawah = 200;
+    float tinggi = 100;
+
+    float[,] matrix = new float[3, 3] {
+      { 1, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 1 },
+    };
+
+    var baseTrapesium = _bentukDasar.TrapesiumSiku(titikAwal, (int)panjangAtas, (int)panjangBawah, (int)tinggi);
+
+    // translate
+    _transformasi.Translation(matrix, translation.X, translation.Y, ref titikAwal);
+
+    Vector2 titikTengah = new(titikAwal.X + panjangBawah / 2, titikAwal.Y + tinggi / 2);
+
+    // rotate (pivot titikTengah)
+    _transformasi.RotationClockwise(matrix, rotation, titikTengah);
+
+    // scale (pivot titikTengah)
+    _transformasi.Scaling(matrix, scale, scale, titikTengah);
+
+    var trapesium1 = _transformasi.GetTransformPoint(matrix, baseTrapesium);
+    GraphicsUtils.PutPixelAllCartesian(this, trapesium1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 1);
 
     // Kuadran 2 (garis normal)
-    Vector2 taw2 = ScreenUtils.ConvertToPixel(-400, 100);
-    var trapesium2 = _bentukDasar.TrapesiumSiku(taw2, 150, 200, 100);
-    GraphicsUtils.PutPixelAll(this, trapesium2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var trapesium2 = _transformasi.GetTransformPoint(matrix, baseTrapesium);
+    GraphicsUtils.PutPixelAllCartesian(this, trapesium2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 taw3 = ScreenUtils.ConvertToPixel(-400, -200);
-    var trapesium3 = _bentukDasar.TrapesiumSiku(taw3, 200, 150, 100);
-    GraphicsUtils.PutPixelAll(this, trapesium3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
+    _transformasi.ReflectionToX(matrix, ref titikTengah);
+    var trapesium3 = _transformasi.GetTransformPoint(matrix, baseTrapesium);
+    GraphicsUtils.PutPixelAllCartesian(this, trapesium3, GraphicsUtils.DrawStyle.StripStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 taw4 = ScreenUtils.ConvertToPixel(200, -200);
-    var trapesium4 = _bentukDasar.TrapesiumSiku(taw4, 200, 150, 100);
-    GraphicsUtils.PutPixelAll(this, trapesium4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
+    _transformasi.ReflectionToY(matrix, ref titikTengah);
+    var trapesium4 = _transformasi.GetTransformPoint(matrix, baseTrapesium);
+    GraphicsUtils.PutPixelAllCartesian(this, trapesium4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
   }
 
   private void GambarLingkaran()
   {
     // kuadran 1 (garis-garis)
-    Vector2 tt1 = ScreenUtils.ConvertToPixel(200, 150);
-    var lingkaran1 = _bentukDasar.Lingkaran(tt1, 100);
-    GraphicsUtils.PutPixelAll(this, lingkaran1, GraphicsUtils.DrawStyle.CircleDotStrip, Colors.Red, stripLength: 5, gap: 5);
+
+    Vector2 titikPusat = new(0, 0);
+    float radius = 100;
+
+    float[,] matrix = new float[3, 3] {
+      { 1, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 1 },
+    };
+
+    var baseLingkaran = _bentukDasar.Lingkaran(titikPusat, (int)radius);
+
+    // translate
+    _transformasi.Translation(matrix, translation.X, translation.Y, ref titikPusat);
+
+    // rotate (pivot titikPusat)
+    _transformasi.RotationClockwise(matrix, rotation, titikPusat);
+
+    // scale (pivot titikPusat)
+    _transformasi.Scaling(matrix, scale, scale, titikPusat);
+
+    var lingkaran1 = _transformasi.GetTransformPoint(matrix, baseLingkaran);
+    GraphicsUtils.PutPixelAllCartesian(this, lingkaran1, GraphicsUtils.DrawStyle.CircleDotStrip, Colors.Red, stripLength: 5, gap: 5);
 
     // Kuadran 2 (garis normal)
-    Vector2 tt2 = ScreenUtils.ConvertToPixel(-200, 150);
-    var lingkaran2 = _bentukDasar.Lingkaran(tt2, 100);
-    GraphicsUtils.PutPixelAll(this, lingkaran2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    _transformasi.ReflectionToY(matrix, ref titikPusat);
+    var lingkaran2 = _transformasi.GetTransformPoint(matrix, baseLingkaran);
+    GraphicsUtils.PutPixelAllCartesian(this, lingkaran2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 tt3 = ScreenUtils.ConvertToPixel(-200, -150);
-    var lingkaran3 = _bentukDasar.Lingkaran(tt3, 100);
-    GraphicsUtils.PutPixelAll(this, lingkaran3, GraphicsUtils.DrawStyle.CircleStrip, Colors.Green, stripLength: 1, gap: 3);
+    _transformasi.ReflectionToX(matrix, ref titikPusat);
+    var lingkaran3 = _transformasi.GetTransformPoint(matrix, baseLingkaran);
+    GraphicsUtils.PutPixelAllCartesian(this, lingkaran3, GraphicsUtils.DrawStyle.CircleStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 tt4 = ScreenUtils.ConvertToPixel(200, -150);
-    var lingkaran4 = _bentukDasar.Lingkaran(tt4, 100);
-    GraphicsUtils.PutPixelAll(this, lingkaran4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 20, gap: 5);
+    _transformasi.ReflectionToY(matrix, ref titikPusat);
+    var lingkaran4 = _transformasi.GetTransformPoint(matrix, baseLingkaran);
+    GraphicsUtils.PutPixelAllCartesian(this, lingkaran4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 20, gap: 5);
   }
 
   private void GambarElips()
   {
     // kuadran 1 (garis-garis)
-    Vector2 tt1 = ScreenUtils.ConvertToPixel(200, 150);
-    var elips1 = _bentukDasar.Elips(tt1, 100, 50);
-    GraphicsUtils.PutPixelAll(this, elips1, GraphicsUtils.DrawStyle.CircleStrip, Colors.Red, gap: 2);
+
+    Vector2 titikPusat = new(0, 0);
+    float radiusX = 100;
+    float radiusY = 50;
+
+    float[,] matrix = new float[3, 3] {
+      { 1, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 1 },
+    };
+
+    var baseElips = _bentukDasar.Elips(titikPusat, (int)radiusX, (int)radiusY);
+
+    // translate
+    _transformasi.Translation(matrix, translation.X, translation.Y, ref titikPusat);
+
+    // rotate (pivot titikPusat)
+    _transformasi.RotationClockwise(matrix, rotation, titikPusat);
+
+    // scale (pivot titikPusat)
+    _transformasi.Scaling(matrix, scale, scale, titikPusat);
+
+    var elips1 = _transformasi.GetTransformPoint(matrix, baseElips);
+    GraphicsUtils.PutPixelAllCartesian(this, elips1, GraphicsUtils.DrawStyle.CircleDotStrip, Colors.Red, stripLength: 5, gap: 5);
 
     // Kuadran 2 (garis normal)
-    Vector2 tt2 = ScreenUtils.ConvertToPixel(-200, 150);
-    var elips2 = _bentukDasar.Elips(tt2, 100, 50);
-    GraphicsUtils.PutPixelAll(this, elips2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
+    _transformasi.ReflectionToY(matrix, ref titikPusat);
+    var elips2 = _transformasi.GetTransformPoint(matrix, baseElips);
+    GraphicsUtils.PutPixelAllCartesian(this, elips2, GraphicsUtils.DrawStyle.DotDot, Colors.Blue);
 
     // Kuadran 3 (titik titik)
-    Vector2 tt3 = ScreenUtils.ConvertToPixel(-200, -150);
-    var elips3 = _bentukDasar.Elips(tt3, 100, 50);
-    GraphicsUtils.PutPixelAll(this, elips3, GraphicsUtils.DrawStyle.EllipseStrip, Colors.Green, stripLength: 1, gap: 3);
+    _transformasi.ReflectionToX(matrix, ref titikPusat);
+    var elips3 = _transformasi.GetTransformPoint(matrix, baseElips);
+    GraphicsUtils.PutPixelAllCartesian(this, elips3, GraphicsUtils.DrawStyle.CircleStrip, Colors.Green, stripLength: 1, gap: 3);
 
     // Kuadran 4 (titik garis titik)
-    Vector2 tt4 = ScreenUtils.ConvertToPixel(200, -150);
-    var elips4 = _bentukDasar.Elips(tt4, 100, 50);
-    GraphicsUtils.PutPixelAll(this, elips4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 10, gap: 5);
+    _transformasi.ReflectionToY(matrix, ref titikPusat);
+    var elips4 = _transformasi.GetTransformPoint(matrix, baseElips);
+    GraphicsUtils.PutPixelAllCartesian(this, elips4, GraphicsUtils.DrawStyle.DotDash, Colors.Yellow, stripLength: 20, gap: 5);
   }
 
   public override void _ExitTree()

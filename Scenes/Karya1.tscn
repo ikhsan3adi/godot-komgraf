@@ -108,6 +108,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 min_value = -500.0
 max_value = 500.0
+step = 0.1
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Control/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -124,6 +125,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 min_value = -500.0
 max_value = 500.0
+step = 0.1
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Control/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -154,7 +156,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 5.0
+step = 0.1
 
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/PrevBtn" to="." method="_on_prev_btn_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/NextBtn" to="." method="_on_next_btn_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/HBoxContainer2/BtnBack" to="Control/VBoxContainer/HBoxContainer2/BtnBack" method="_on_BtnBack_pressed"]
 [connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/MarginCheckButton" to="." method="_on_margin_button_toggled"]
 [connection signal="toggled" from="Control/VBoxContainer/HBoxContainer2/CartesianCheckButton" to="." method="_on_cartesian_button_toggled"]
