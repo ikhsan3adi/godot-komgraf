@@ -24,42 +24,20 @@ public partial class Karya2 : Node2D
 
   private void MyBunga()
   {
-    // tengah bunga
-    Vector2 pusatLingkaran = new(0, 0);
+    Bunga bunga4Kelopak = new Bunga(25, 30, 40, 4, Colors.Yellow, Colors.Purple);
+    Bunga bunga8Kelopak = new Bunga(25, 25, 15, 8, Colors.Pink, Colors.Cyan);
 
-    List<Vector2> lingkaran = _bentukDasar.Lingkaran(
-      ScreenUtils.ConvertToPixel(pusatLingkaran.X, pusatLingkaran.Y),
-      50
-    );
+    bunga4Kelopak.Draw(this, new(-300, 150), isCartesian: true);
+    bunga4Kelopak.Draw(this, new(-100, 150), isCartesian: true);
+    bunga4Kelopak.Draw(this, new(100, 150), isCartesian: true);
+    bunga4Kelopak.Draw(this, new(300, 150), isCartesian: true);
 
-    GraphicsUtils.PutPixelAll(this, lingkaran, color: Colors.Yellow);
-
-
-    // kelopak
-    Vector2 pusatElips = new(100, 0); // kartesian
-    Matrix4x4 matrix = TransformasiFast.Identity();
-
-    List<Vector2> elips = _bentukDasar.Elips(pusatElips, 50, 35);
-
-    GraphicsUtils.PutPixelAll(
-      this,
-      elips.Select(e => ScreenUtils.ConvertToPixel(e.X, e.Y)).ToList(),
-      color: Colors.Purple
-    );
-
-    float angle = (float)(45 * Math.PI / 180.0); // deg to radian
-
-    _transformasi.RotationCounterClockwise(ref matrix, angle, pusatLingkaran); // pivot adalah pusatLingkaran
-
-    for (int i = 0; i < 7; i++)
-    {
-      elips = _transformasi.GetTransformPoint(matrix, elips);
-      GraphicsUtils.PutPixelAll(
-        this,
-        elips.Select(e => ScreenUtils.ConvertToPixel(e.X, e.Y)).ToList(), // cartesian to screen
-        color: Colors.Purple
-      );
-    }
+    bunga8Kelopak.Draw(this, new(-500, -150), isCartesian: true);
+    bunga8Kelopak.Draw(this, new(-300, -150), isCartesian: true);
+    bunga8Kelopak.Draw(this, new(-100, -150), isCartesian: true);
+    bunga8Kelopak.Draw(this, new(100, -150), isCartesian: true);
+    bunga8Kelopak.Draw(this, new(300, -150), isCartesian: true);
+    bunga8Kelopak.Draw(this, new(500, -150), isCartesian: true);
   }
 
   private void MarginPixel()
