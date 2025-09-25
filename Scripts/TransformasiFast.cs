@@ -73,7 +73,7 @@ public partial class TransformasiFast : RefCounted
 
   public void Scaling(ref Matrix4x4 matrix, float x, float y, Vector2 coord)
   {
-    if (coord.X != 0 && coord.Y != 0)
+    if (coord.X != 0 || coord.Y != 0)
     {
       Translation(ref matrix, -coord.X, -coord.Y);
       matrix = CreateScale(x, y) * matrix; // Pre-multiplication
@@ -87,7 +87,7 @@ public partial class TransformasiFast : RefCounted
 
   public void RotationClockwise(ref Matrix4x4 matrix, float radians, Vector2 coord) // Use radians directly
   {
-    if (coord.X != 0 && coord.Y != 0)
+    if (coord.X != 0 || coord.Y != 0)
     {
       Translation(ref matrix, -coord.X, -coord.Y);
       matrix = CreateRotationZ(radians) * matrix; // Pre-multiplication
@@ -101,7 +101,7 @@ public partial class TransformasiFast : RefCounted
 
   public void RotationCounterClockwise(ref Matrix4x4 matrix, float radians, Vector2 coord) // Use radians directly
   {
-    if (coord.X != 0 && coord.Y != 0)
+    if (coord.X != 0 || coord.Y != 0)
     {
       Translation(ref matrix, -coord.X, -coord.Y);
       matrix = CreateRotationZ(-radians) * matrix; // Pre-multiplication
@@ -119,7 +119,7 @@ public partial class TransformasiFast : RefCounted
     shearingMatrix.M12 = x;
     shearingMatrix.M21 = y;
 
-    if (coord.X != 0 && coord.Y != 0)
+    if (coord.X != 0 || coord.Y != 0)
     {
       Translation(ref matrix, -coord.X, -coord.Y);
       matrix = shearingMatrix * matrix; // Pre-multiplication
